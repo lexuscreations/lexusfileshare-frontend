@@ -11,50 +11,66 @@ const Sender = ({ socketRef }) => {
   const [UUID, setUUID] = useState("");
   const [receiverIDs, setReceiverIDs] = useState([]);
   const [isModelPopupOpen, setIsModelPopupOpen] = useState(false);
-  const [tempReceiverDataForModel, setTempReceiverDataForModel] = useState([]);
+  const [tempReceiverRequestDataForModel, setTempReceiverRequestDataForModel] =
+    useState({});
 
-  const acceptReceiverJoiningRequest = useCallback(() => {
-    socketRef.current.emit(
-      socketActions.sender_accept_receiver_joining_request,
-      {
-        sender_uid: UUID,
-        receiverID: tempReceiverDataForModel.receiverID,
-        receiver_socketId: tempReceiverDataForModel.receiver_socketId,
-      }
-    );
-    setReceiverIDs((prev) => [...prev, tempReceiverDataForModel.receiverID]);
-  }, [
-    UUID,
-    socketRef,
-    tempReceiverDataForModel.receiverID,
-    tempReceiverDataForModel.receiver_socketId,
-  ]);
+  const acceptReceiverJoiningRequest = useCallback(
+    (receiverID) => {
+      socketRef.current.emit(
+        socketActions.sender_accept_receiver_joining_request,
+        {
+          sender_uid: UUID,
+          receiverID,
+          receiver_socketId:
+            tempReceiverRequestDataForModel[receiverID].receiver_socketId,
+        }
+      );
+    },
+    [UUID, socketRef, tempReceiverRequestDataForModel]
+  );
 
-  const rejectReceiverJoiningRequest = useCallback(() => {
-    socketRef.current.emit(
-      socketActions.sender_reject_receiver_joining_request,
-      {
-        sender_uid: UUID,
-        receiverID: tempReceiverDataForModel.receiverID,
-        receiver_socketId: tempReceiverDataForModel.receiver_socketId,
+  const rejectReceiverJoiningRequest = useCallback(
+    (receiverID) => {
+      socketRef.current.emit(
+        socketActions.sender_reject_receiver_joining_request,
+        {
+          sender_uid: UUID,
+          receiverID,
+          receiver_socketId:
+            tempReceiverRequestDataForModel[receiverID].receiver_socketId,
+        }
+      );
+    },
+    [UUID, socketRef, tempReceiverRequestDataForModel]
+  );
+
+  const receiverRequestHandlerMiddlewareFn = useCallback(
+    (receiverID, action) => {
+      if (action === "reject") {
+        rejectReceiverJoiningRequest(receiverID);
+      } else if (action === "accept") {
+        acceptReceiverJoiningRequest(receiverID);
+        setReceiverIDs((prev) => [...prev, receiverID]);
       }
-    );
-  }, [
-    UUID,
-    socketRef,
-    tempReceiverDataForModel.receiverID,
-    tempReceiverDataForModel.receiver_socketId,
-  ]);
+
+      setTempReceiverRequestDataForModel((prev) => {
+        const temp = { ...prev };
+        delete temp[receiverID];
+        return temp;
+      });
+    },
+    [acceptReceiverJoiningRequest, rejectReceiverJoiningRequest]
+  );
 
   useEffect(() => {
     const socketRefCurrent = socketRef.current;
 
     socketRefCurrent.on(socketActions.receiver_joining_request, (data) => {
       setIsModelPopupOpen(true);
-      setTempReceiverDataForModel({
-        receiverID: data.receiverID,
-        receiver_socketId: data.receiver_socketId,
-      });
+      setTempReceiverRequestDataForModel((prev) => ({
+        ...prev,
+        [data.receiverID]: { receiver_socketId: data.receiver_socketId },
+      }));
     });
 
     socketRefCurrent.on(
@@ -78,6 +94,9 @@ const Sender = ({ socketRef }) => {
   useEffect(() => {
     const socketRefCurrent = socketRef.current;
 
+    if (!Object.keys(tempReceiverRequestDataForModel).length)
+      setIsModelPopupOpen(false);
+
     socketRefCurrent.off(
       socketActions.receiver_disconnect_during_sender_request_approval
     );
@@ -85,10 +104,12 @@ const Sender = ({ socketRef }) => {
     socketRefCurrent.on(
       socketActions.receiver_disconnect_during_sender_request_approval,
       (data) => {
-        setIsModelPopupOpen(false);
-        setTempReceiverDataForModel([]);
+        setTempReceiverRequestDataForModel((prev) => {
+          const temp = { ...prev };
+          delete temp[data.receiverID];
+          return temp;
+        });
         toast.error(`${data.receiverID} | receiver-disconnect`);
-        receiverIDs.length < 2 && setReceiverIDs([]);
       }
     );
 
@@ -97,7 +118,7 @@ const Sender = ({ socketRef }) => {
         socketActions.receiver_disconnect_during_sender_request_approval
       );
     };
-  }, [receiverIDs.length, socketRef]);
+  }, [socketRef, tempReceiverRequestDataForModel]);
 
   return (
     <>
@@ -107,32 +128,50 @@ const Sender = ({ socketRef }) => {
       >
         <section>
           <div style={{ marginBottom: "1rem" }}>
-            <p style={{ fontWeight: 600 }}>
-              {tempReceiverDataForModel.receiverID} | some receiver want's to
-              join
-            </p>
+            <span style={{ fontWeight: 600 }}>
+              <h4>
+                {Object.keys(tempReceiverRequestDataForModel).length > 1
+                  ? "Multiple"
+                  : "Someone"}{" "}
+                wants to join
+              </h4>
+            </span>
           </div>
-          <div>
-            <button
-              className="Sender_model_receiver_accept_button model_popup_buttons"
-              onClick={() => {
-                acceptReceiverJoiningRequest();
-                setIsModelPopupOpen(false);
-              }}
-            >
-              Admit
-            </button>
-            &nbsp;
-            <button
-              className="Sender_model_receiver_reject_button model_popup_buttons"
-              onClick={() => {
-                rejectReceiverJoiningRequest();
-                setIsModelPopupOpen(false);
-              }}
-            >
-              Deny
-            </button>
-          </div>
+          {Object.keys(tempReceiverRequestDataForModel).map(
+            (receiverID, ind) => (
+              <div
+                key={ind}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontWeight: "bold", marginRight: "1.5rem" }}>
+                  {receiverID}
+                </span>
+                <div>
+                  <button
+                    className="Sender_model_receiver_accept_button model_popup_buttons"
+                    onClick={() => {
+                      receiverRequestHandlerMiddlewareFn(receiverID, "accept");
+                    }}
+                  >
+                    Admit
+                  </button>
+                  &nbsp;
+                  <button
+                    className="Sender_model_receiver_reject_button model_popup_buttons"
+                    onClick={() => {
+                      receiverRequestHandlerMiddlewareFn(receiverID, "reject");
+                    }}
+                  >
+                    Deny
+                  </button>
+                </div>
+              </div>
+            )
+          )}
         </section>
       </CustomModelPopup>
 
