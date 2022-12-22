@@ -89,7 +89,7 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
               style={{ margin: "4rem 1.3rem 0 1.3rem", textAlign: "center" }}
             >
               <label className="RoomCreationCom__uuidFld_label">
-                Your Share / Receive Universally Unique Identifiers (ID)
+                Your Share / Receive Universally Unique Identifiers (UUID)
               </label>
               <div className="RoomCreationCom_copyAndEnableUUID_con">
                 <input
@@ -114,10 +114,10 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
               </div>
               <div style={{ marginTop: "2rem" }}>
                 <mark>
-                  Click on the `<code>Enable-Sharing</code>
-                  `, button and then just provide your UUID to the receiver, and
-                  as the receiver joined, then you will see the options for file
-                  selection and sharing.
+                  Click on the `<code>Enable-Sharing</code>` button and then
+                  just provide your UUID to the receiver, and as the receiver
+                  joined, then you will see the options for file selection and
+                  sharing.
                 </mark>
               </div>
             </section>

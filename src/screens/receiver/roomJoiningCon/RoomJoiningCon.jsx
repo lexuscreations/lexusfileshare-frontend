@@ -14,15 +14,19 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
 
   const [sender_uid, setSender_uid] = useState("");
   const [connectBtnState, setConnectBtnState] = useState("Join");
+  const [isApprovalPending, setIsApprovalPending] = useState(false);
 
-  const handleJoinSenderRoom = useCallback(() => {
-    if (!sender_uid) return toast.error("Please Fill Sender UUID!");
+  const handleJoinSenderRoom = useCallback(
+    (targetEl) => {
+      if (!sender_uid) return toast.error("Please Fill Sender UUID!");
 
-    socketRef.current.emit(socketActions.receiverJoin, {
-      sender_uid,
-      receiverID: UUID,
-    });
-  }, [socketRef, sender_uid, UUID]);
+      socketRef.current.emit(socketActions.receiverJoin, {
+        sender_uid,
+        receiverID: UUID,
+      });
+    },
+    [socketRef, sender_uid, UUID]
+  );
 
   const generateUUIDhandler = useCallback(() => {
     const generatedUUID = uuid();
@@ -44,19 +48,23 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
       toast.error(
         "Incorrect UUID or Sender isn't in the room, Ask Sender to enable sharing and try again!"
       );
+      requestSendSandStatusBtnRef.current.style.background = "rgb(199 137 54)";
       setConnectBtnState("Try Join Again");
+      setIsApprovalPending(false);
     });
 
     socketRefCurrent.on(socketActions.joining_request_sent_confirmation, () => {
       toast.success("Request send, Sender Approval pending!");
       requestSendSandStatusBtnRef.current.style.background = "rgb(199 137 54)";
       setConnectBtnState("Approval Pending...");
+      setIsApprovalPending(true);
     });
 
     socketRefCurrent.on(socketActions.receiver_joining_decline, (data) => {
       toast.error("Sender Declined Your joining request!");
       requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
       setConnectBtnState("Sender Declined! - Try again!");
+      setIsApprovalPending(false);
     });
 
     socketRefCurrent.on(
@@ -65,6 +73,7 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
         toast.error("You already joined with same UUID!");
         requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
         setConnectBtnState("Already in the room!");
+        setIsApprovalPending(false);
       }
     );
 
@@ -74,6 +83,7 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
         toast.error("Sender UUID and Receiver UUID can't be same!");
         requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
         setConnectBtnState("Found Same UUID as Sender!");
+        setIsApprovalPending(false);
       }
     );
 
@@ -82,7 +92,8 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
       (data) => {
         toast.error(`${data.sender_uid} | Sender Disconnected!`);
         requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
-        setConnectBtnState("Sender Disconnected!");
+        setConnectBtnState("Sender Disconnected! - Try again!");
+        setIsApprovalPending(false);
       }
     );
 
@@ -127,10 +138,20 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
                 type="text"
                 className="RoomJoiningCon_Enter_SenderUUID_input"
                 onChange={(e) => setSender_uid(e.target.value)}
+                disabled={isApprovalPending}
               />
               <div
-                className="RoomJoiningCon_connectJoinBtn"
-                onClick={(e) => handleJoinSenderRoom()}
+                className={`RoomJoiningCon_connectJoinBtn ${
+                  isApprovalPending
+                    ? ""
+                    : "RoomJoiningCon_connectJoinBtn_with_hover"
+                }`}
+                style={{
+                  cursor: isApprovalPending ? "not-allowed" : "pointer",
+                }}
+                onClick={(e) =>
+                  !isApprovalPending && handleJoinSenderRoom(e.target)
+                }
                 ref={requestSendSandStatusBtnRef}
               >
                 <span style={{ position: "relative", top: "-2px" }}>

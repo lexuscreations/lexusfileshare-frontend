@@ -44,12 +44,12 @@
   transition: all 0.3s;
 }
 
-.RoomJoiningCon_connectJoinBtn:hover {
+.RoomJoiningCon_connectJoinBtn_with_hover:hover {
   transform: scale(1.1);
   background: hsl(180, 1%, 7%);
 }
 
-.RoomJoiningCon_connectJoinBtn:active {
+.RoomJoiningCon_connectJoinBtn_with_hover:active {
   transform: scale(0.9);
   background: hsl(180, 1%, 13%);
 }
