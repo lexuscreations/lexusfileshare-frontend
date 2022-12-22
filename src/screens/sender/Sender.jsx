@@ -131,45 +131,71 @@ const Sender = ({ socketRef }) => {
             <span style={{ fontWeight: 600 }}>
               <h4>
                 {Object.keys(tempReceiverRequestDataForModel).length > 1
-                  ? "Multiple"
-                  : "Someone"}{" "}
+                  ? "Multiple receivers"
+                  : "Some receiver"}{" "}
                 wants to join
               </h4>
             </span>
           </div>
+          <hr style={{ marginBottom: "1rem" }} />
           {Object.keys(tempReceiverRequestDataForModel).map(
-            (receiverID, ind) => (
-              <div
-                key={ind}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span style={{ fontWeight: "bold", marginRight: "1.5rem" }}>
-                  {receiverID}
-                </span>
-                <div>
-                  <button
-                    className="Sender_model_receiver_accept_button model_popup_buttons"
-                    onClick={() => {
-                      receiverRequestHandlerMiddlewareFn(receiverID, "accept");
+            (receiverID, ind, arr) => (
+              <>
+                <div
+                  key={ind}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: arr.length - 1 !== ind ? "1rem" : "",
+                  }}
+                >
+                  <span style={{ fontWeight: "bold", marginRight: "1.5rem" }}>
+                    {receiverID}
+                  </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    Admit
-                  </button>
-                  &nbsp;
-                  <button
-                    className="Sender_model_receiver_reject_button model_popup_buttons"
-                    onClick={() => {
-                      receiverRequestHandlerMiddlewareFn(receiverID, "reject");
-                    }}
-                  >
-                    Deny
-                  </button>
+                    <button
+                      className="Sender_model_receiver_accept_button model_popup_buttons"
+                      onClick={() => {
+                        receiverRequestHandlerMiddlewareFn(
+                          receiverID,
+                          "accept"
+                        );
+                      }}
+                    >
+                      Admit
+                    </button>
+                    &nbsp;
+                    <button
+                      className="Sender_model_receiver_reject_button model_popup_buttons"
+                      onClick={() => {
+                        receiverRequestHandlerMiddlewareFn(
+                          receiverID,
+                          "reject"
+                        );
+                      }}
+                    >
+                      Deny
+                    </button>
+                  </div>
                 </div>
-              </div>
+                {arr.length - 1 !== ind ? (
+                  <hr
+                    style={{
+                      marginBottom: "1rem",
+                      background: "#ebe6e6",
+                      height: "0.1px",
+                      border: "none",
+                    }}
+                  />
+                ) : null}
+              </>
             )
           )}
         </section>

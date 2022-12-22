@@ -18,6 +18,7 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
 
   const handleJoinSenderRoom = useCallback(
     (targetEl) => {
+      if (!UUID) return toast.error("kindly get your UUID first!");
       if (!sender_uid) return toast.error("Please Fill Sender UUID!");
 
       socketRef.current.emit(socketActions.receiverJoin, {
@@ -131,41 +132,41 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
                 </label>
               </>
             ) : null}
-            <div className="RoomJoiningCon_Enter_SenderUUID_form_container">
-              <input
-                value={sender_uid}
-                placeholder="Enter Sender UUID"
-                type="text"
-                className="RoomJoiningCon_Enter_SenderUUID_input"
-                onChange={(e) => setSender_uid(e.target.value)}
-                disabled={isApprovalPending}
-              />
-              <div
-                className={`RoomJoiningCon_connectJoinBtn ${
-                  isApprovalPending
-                    ? ""
-                    : "RoomJoiningCon_connectJoinBtn_with_hover"
-                }`}
-                style={{
-                  cursor: isApprovalPending ? "not-allowed" : "pointer",
-                }}
-                onClick={(e) =>
-                  !isApprovalPending && handleJoinSenderRoom(e.target)
-                }
-                ref={requestSendSandStatusBtnRef}
-              >
-                <span style={{ position: "relative", top: "-2px" }}>
-                  <TbPlugConnected
-                    style={{
-                      position: "relative",
-                      top: "3px",
-                      right: "3px",
-                    }}
-                  />{" "}
-                  {connectBtnState}
-                </span>
+            {UUID ? (
+              <div className="RoomJoiningCon_Enter_SenderUUID_form_container">
+                <input
+                  value={sender_uid}
+                  placeholder="Enter Sender UUID"
+                  type="text"
+                  className="RoomJoiningCon_Enter_SenderUUID_input"
+                  onChange={(e) => setSender_uid(e.target.value)}
+                  disabled={isApprovalPending}
+                />
+                <div
+                  className={`RoomJoiningCon_connectJoinBtn ${
+                    isApprovalPending
+                      ? ""
+                      : "RoomJoiningCon_connectJoinBtn_with_hover"
+                  }`}
+                  style={{
+                    cursor: isApprovalPending ? "not-allowed" : "pointer",
+                  }}
+                  onClick={(e) => !isApprovalPending && handleJoinSenderRoom()}
+                  ref={requestSendSandStatusBtnRef}
+                >
+                  <span style={{ position: "relative", top: "-2px" }}>
+                    <TbPlugConnected
+                      style={{
+                        position: "relative",
+                        top: "3px",
+                        right: "3px",
+                      }}
+                    />{" "}
+                    {connectBtnState}
+                  </span>
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </section>
