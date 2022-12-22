@@ -1,0 +1,73 @@
+.RoomCreationCom__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.RoomCreationCom__uuidFld_label {
+  font-weight: 700;
+  font-size: 25px;
+}
+
+.RoomCreationCom__uuidFld {
+  padding: 0.7rem 0.2rem;
+  border: 1px dashed black;
+  font-size: 100%;
+  margin: 1rem;
+  width: 35%;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.RoomCreationCom__uuidFld:hover {
+  transform: scale(1.06);
+}
+
+.RoomCreationCom__uuidFld:active {
+  transform: scale(0.9);
+}
+
+.RoomCreationCom__container code {
+  background: #616767;
+  border-radius: 5px;
+  color: white;
+  padding: 0.1rem 0.3rem;
+  margin: 0 0.2rem;
+}
+
+.RoomCreationCom__container mark {
+  margin-top: 1.5rem;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+  line-height: 2rem;
+  background-color: #a3e72782;
+}
+
+.RoomCreationCom_generateRoomID_Sec_Con {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.RoomCreationCom_copyAndEnableUUID_con {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: auto;
+}
+
+@media (width <= 535px) {
+  .RoomCreationCom__uuidFld {
+    width: 100% !important;
+    margin: 1rem 0;
+  }
+  .RoomCreationCom_copyAndEnableUUID_con {
+    width: 100%;
+  }
+}

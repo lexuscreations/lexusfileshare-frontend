@@ -1,0 +1,55 @@
+.FileAcceptCon_previewContainer {
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 2rem;
+}
+
+.FileAcceptCon_previewContainer > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem 1rem;
+  box-shadow: 0px 0px 20px 0px #d9e1e7b5;
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+  width: 40%;
+}
+
+.FileAcceptCon_image_preview_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: 0px 0px 20px 0px #d9e1e7b5;
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+}
+
+.FileAcceptCon_acceptBtn {
+  margin-top: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  background: hsl(210, 12%, 85%);
+  border-radius: 0.2rem;
+}
+
+.FileAcceptCon_acceptBtn:hover {
+  background: hsl(210, 12%, 67%);
+  transform: scale(1.1);
+}
+
+.FileAcceptCon_acceptBtn:active {
+  background: hsl(210, 12%, 47%);
+  transform: scale(0.9);
+}

@@ -1,0 +1,51 @@
+.CommonMessagePage {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.CommonMessagePage h1 {
+  font-size: 4rem;
+  font-weight: bolder;
+  letter-spacing: 0.4rem;
+  text-shadow: 2px 2px 5px #d41075c2;
+  word-break: break-all;
+  margin-bottom: 1.6rem;
+}
+
+.CommonMessagePage p {
+  font-weight: 700;
+}
+
+@media (width <= 650px) {
+  .CommonMessagePage h1 {
+    font-size: 3rem;
+  }
+
+  .CommonMessagePage p {
+    font-size: 1.6rem;
+  }
+}
+
+@media (width <= 480px) {
+  .CommonMessagePage h1 {
+    font-size: 2.2rem;
+  }
+
+  .CommonMessagePage p {
+    font-size: 1.3rem;
+  }
+}
+
+@media (width <= 374px) {
+  .CommonMessagePage h1 {
+    font-size: 1.6rem;
+  }
+
+  .CommonMessagePage p {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,25 @@
+.commonSendReceivePageHeading {
+  padding-top: 5rem;
+  font-size: 40px;
+  margin-bottom: 20px;
+  line-height: 45px;
+  color: #2e2f30;
+}
+
+@media (width <= 535px) {
+  .commonSendReceivePageHeading {
+    font-size: 35px;
+  }
+}
+
+@media (width <= 440px) {
+  .commonSendReceivePageHeading {
+    font-size: 30px;
+  }
+}
+
+@media (width <= 375px) {
+  .commonSendReceivePageHeading {
+    font-size: 26px;
+  }
+}

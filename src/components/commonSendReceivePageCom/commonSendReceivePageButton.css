@@ -1,0 +1,32 @@
+.CommonSendReceivePageButton_container {
+  cursor: pointer;
+  background: hsl(0, 0%, 15%);
+  color: #fff;
+  padding: 10px 20px 12px 20px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CommonSendReceivePageButton_container:hover {
+  transform: scale(1.1);
+  background: hsl(0, 0%, 7%);
+}
+
+.CommonSendReceivePageButton_container:active {
+  transform: scale(0.9);
+  background: hsl(0, 0%, 4%);
+}
+
+.CommonSendReceivePageButton_icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  position: relative;
+  top: 1.5px;
+}

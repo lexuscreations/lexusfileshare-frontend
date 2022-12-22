@@ -1,0 +1,124 @@
+.FileSelectCom_dropZoneContainer {
+  padding-top: 3rem;
+}
+
+.FileSelectCom_dropZone {
+  height: 13vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-width: 2px;
+  border-style: dashed;
+  border-color: rgb(85, 85, 85);
+  border-image: initial;
+  width: 50%;
+  margin: auto;
+  cursor: pointer;
+}
+
+.FileSelectCom_dropZone span#openFileSelectionDialogueBtn {
+  border-bottom: 2px solid hsl(160, 78%, 47%);
+  color: hsl(120, 100%, 25%);
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.FileSelectCom_dropZone span#openFileSelectionDialogueBtn:hover {
+  border-bottom: 2px solid hsl(160, 78%, 17%);
+  color: hsl(120, 100%, 17%);
+  font-weight: 700;
+}
+
+.FileSelectCom_previewContainer {
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 2rem;
+}
+
+.FileSelectCom_previewContainer > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem 1rem;
+  box-shadow: 0px 0px 20px 0px #d9e1e7b5;
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+  width: 40%;
+}
+
+.FileSelectCom_shareBtn {
+  margin-top: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  background: hsl(210, 12%, 85%);
+  border-radius: 0.2rem;
+}
+
+.FileSelectCom_shareBtn:hover {
+  background: hsl(210, 12%, 67%);
+  transform: scale(1.1);
+}
+
+.FileSelectCom_shareBtn:active {
+  background: hsl(210, 12%, 47%);
+  transform: scale(0.9);
+}
+
+.FileSelectCom_image_preview_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: 0px 0px 20px 0px #d9e1e7b5;
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+}
+
+.FileSelectCom_errorContainer {
+  margin: auto;
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: self-start;
+  padding: 0.3rem;
+  padding-bottom: 1rem;
+  width: 50%;
+  height: 50vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 1px 0.5px #cdd2d6;
+  border-radius: 0.3rem;
+}
+
+@media (width <= 730px) {
+  .FileSelectCom_dropZone {
+    width: 70%;
+  }
+  .FileSelectCom_image_preview_container {
+    width: 100%;
+  }
+  .FileSelectCom_errorContainer {
+    width: 96%;
+  }
+}
+
+@media (width <= 535px) {
+  .FileSelectCom_dropZone {
+    width: 96%;
+  }
+
+  .FileSelectCom_previewContainer > div {
+    width: 100%;
+  }
+}

@@ -1,0 +1,81 @@
+:root {
+  --headerHue: 210;
+  --headerSaturation: 9%;
+  --headerLight: 0.741;
+}
+
+header nav {
+  height: 100%;
+}
+
+.app-header-nav ul {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: hsla(
+    var(--headerHue),
+    var(--headerSaturation),
+    90%,
+    var(--headerLight)
+  );
+  box-shadow: 0px 0px 20px 0px
+    hsla(var(--headerHue), var(--headerSaturation), 70%, var(--headerLight));
+}
+
+.app-header-nav ul li {
+  border-radius: 5%;
+  list-style-type: none;
+  background-color: hsla(
+    var(--headerHue),
+    var(--headerSaturation),
+    80%,
+    var(--headerLight)
+  );
+  margin: 0.5rem 0;
+  transition: all 0.3s;
+}
+
+.app-header-nav ul li a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.app-header-nav ul li.Header_appTitle a {
+  font-weight: 700;
+  text-transform: none;
+}
+
+.app-header-nav ul li:has(> a):hover {
+  background-color: hsla(
+    var(--headerHue),
+    var(--headerSaturation),
+    70%,
+    var(--headerLight)
+  );
+}
+
+.app-header-nav ul li:has(> a.active-nav-link) {
+  background-color: hsla(
+    var(--headerHue),
+    var(--headerSaturation),
+    60%,
+    var(--headerLight)
+  );
+  border-bottom: 3px solid
+    hsla(var(--headerHue), var(--headerSaturation), 50%, var(--headerLight));
+  transform: scale(1.1);
+}
+
+.Header_link_logo {
+  margin-right: 0.5rem;
+}

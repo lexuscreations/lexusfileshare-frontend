@@ -1,0 +1,35 @@
+.model_popup_buttons {
+  cursor: pointer;
+  padding: 0.4rem;
+  margin: 0.4rem;
+  background: #93dd8f;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.Sender_model_receiver_accept_button {
+  background: #93dd8f;
+}
+
+.Sender_model_receiver_accept_button:hover {
+  background: #63e35c;
+}
+
+.Sender_model_receiver_accept_button:active {
+  background: #4da748;
+}
+
+.Sender_model_receiver_reject_button {
+  background: #dd8f8f;
+}
+
+.Sender_model_receiver_reject_button:hover {
+  background: #e86c6c;
+}
+
+.Sender_model_receiver_reject_button:active {
+  background: #b85454;
+}
