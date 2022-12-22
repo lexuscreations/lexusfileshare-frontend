@@ -1,13 +1,15 @@
+import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { CiBarcode } from "react-icons/ci";
 import { TbPlugConnected } from "react-icons/tb";
 import { useCallback, useState, useEffect, useRef } from "react";
 
 import "./roomJoiningCon.css";
-import { socketActions } from "../../../config/";
-import { Heading } from "../../../components/commonSendReceivePageCom/";
+import { localStorageHandler } from "../../../helper/";
+import { socketActions, localStorageConfig } from "../../../config/";
+import { Heading, Button } from "../../../components/commonSendReceivePageCom/";
 
-const RoomJoiningCon = ({ UUID, socketRef }) => {
+const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
   const requestSendSandStatusBtnRef = useRef(null);
 
   const [sender_uid, setSender_uid] = useState("");
@@ -21,6 +23,19 @@ const RoomJoiningCon = ({ UUID, socketRef }) => {
       receiverID: UUID,
     });
   }, [socketRef, sender_uid, UUID]);
+
+  const generateUUIDhandler = useCallback(() => {
+    const generatedUUID = uuid();
+
+    localStorageHandler.set({
+      key: localStorageConfig.shareReceiveUUID,
+      newVal: generatedUUID,
+    });
+
+    toast.success("New UUID Allocated Successfully!");
+
+    setUUID(generatedUUID);
+  }, [setUUID]);
 
   useEffect(() => {
     const socketRefCurrent = socketRef.current;
@@ -89,17 +104,22 @@ const RoomJoiningCon = ({ UUID, socketRef }) => {
     <>
       <section className="RoomJoiningCon_container">
         <div style={{ textAlign: "center", width: "100%" }}>
-          <Heading />
+          <div className="RoomJoiningCon_generateRoomID_Sec_Con">
+            <Heading />
+            <Button
+              onClickFn={generateUUIDhandler}
+              Icon={CiBarcode}
+              btnValue={UUID ? "Get New UUID" : "Get Your UUID"}
+            />
+          </div>
           <div style={{ marginTop: "2.5rem" }}>
-            <label className="RoomJoiningCon__uuidFld_label">
-              {UUID ? (
-                `Your UUID: ${UUID}`
-              ) : (
-                <>
-                  <Link to={"/send"}>Get Your UUID</Link>
-                </>
-              )}
-            </label>
+            {UUID ? (
+              <>
+                <label className="RoomJoiningCon__uuidFld_label">
+                  Your UUID: {UUID}
+                </label>
+              </>
+            ) : null}
             <div className="RoomJoiningCon_Enter_SenderUUID_form_container">
               <input
                 value={sender_uid}

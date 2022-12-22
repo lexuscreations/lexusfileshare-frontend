@@ -65,7 +65,7 @@ const Receiver = ({ socketRef }) => {
     <>
       {!sender_uid ? (
         <>
-          <RoomJoiningCon UUID={UUID} socketRef={socketRef} />
+          <RoomJoiningCon UUID={UUID} socketRef={socketRef} setUUID={setUUID} />
         </>
       ) : (
         <>

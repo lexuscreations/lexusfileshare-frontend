@@ -53,3 +53,11 @@
   transform: scale(0.9);
   background: hsl(180, 1%, 13%);
 }
+
+.RoomJoiningCon_generateRoomID_Sec_Con {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
