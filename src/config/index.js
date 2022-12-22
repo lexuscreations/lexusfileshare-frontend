@@ -28,6 +28,8 @@ export const socketActions = {
     "receiver-already-joined-with-same-UUID",
   receiver_sender_UUID_can_not_be_same: "receiver-sender-UUID-can_not-be-same",
   receiverJoiningDone: "receiver-joining-done",
+  sender_disconnect_during_receiver_request_approval:
+    "sender-disconnect-during-receiver-request-approval",
   sender_disconnected_from_the_room: "sender-disconnected-from-the-room",
 
   fsMeta: "fs-meta",

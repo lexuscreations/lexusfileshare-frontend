@@ -62,6 +62,15 @@ const RoomJoiningCon = ({ UUID, socketRef }) => {
       }
     );
 
+    socketRefCurrent.on(
+      socketActions.sender_disconnect_during_receiver_request_approval,
+      (data) => {
+        toast.error(`${data.sender_uid} | Sender Disconnected!`);
+        requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
+        setConnectBtnState("Sender Disconnected!");
+      }
+    );
+
     return () => {
       socketRefCurrent.off(socketActions.receiver_joining_decline);
       socketRefCurrent.off(socketActions.receiverJoinFailed_sender404);
@@ -70,6 +79,9 @@ const RoomJoiningCon = ({ UUID, socketRef }) => {
         socketActions.receiver_already_joined_with_same_UUID
       );
       socketRefCurrent.off(socketActions.receiver_sender_UUID_can_not_be_same);
+      socketRefCurrent.off(
+        socketActions.sender_disconnect_during_receiver_request_approval
+      );
     };
   }, [socketRef]);
 

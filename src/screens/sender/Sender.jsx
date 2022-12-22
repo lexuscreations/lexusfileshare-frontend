@@ -51,7 +51,10 @@ const Sender = ({ socketRef }) => {
 
     socketRefCurrent.on(socketActions.receiver_joining_request, (data) => {
       setIsModelPopupOpen(true);
-      setTempReceiverDataForModel(data);
+      setTempReceiverDataForModel({
+        receiverID: data.receiverID,
+        receiver_socketId: data.receiver_socketId,
+      });
     });
 
     socketRefCurrent.on(
@@ -105,8 +108,8 @@ const Sender = ({ socketRef }) => {
         <section>
           <div style={{ marginBottom: "1rem" }}>
             <p style={{ fontWeight: 600 }}>
-              {tempReceiverDataForModel.receiverID} | receiver want's to join,
-              press ok to accept or press cancel to decline
+              {tempReceiverDataForModel.receiverID} | some receiver want's to
+              join
             </p>
           </div>
           <div>
@@ -117,7 +120,7 @@ const Sender = ({ socketRef }) => {
                 setIsModelPopupOpen(false);
               }}
             >
-              Ok
+              Admit
             </button>
             &nbsp;
             <button
@@ -127,7 +130,7 @@ const Sender = ({ socketRef }) => {
                 setIsModelPopupOpen(false);
               }}
             >
-              Cancel
+              Deny
             </button>
           </div>
         </section>
