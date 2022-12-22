@@ -43,11 +43,33 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
   }, [setUUID, isSharingEnabled]);
 
   useEffect(() => {
+    const socketRefCurrent = socketRef.current;
+
+    socketRefCurrent.emit(
+      "sender-requestToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready",
+      {
+        sender_uid: UUID,
+      }
+    );
+
+    socketRefCurrent.on(
+      "sender-responseToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready",
+      (data) => {
+        setIsSharingEnabled(data.isSharingEnabled);
+      }
+    );
+
     const state = localStorageHandler.get({
       key: localStorageConfig.shareReceiveUUID,
     });
     state && setUUID(state);
-  }, [setUUID]);
+
+    return () => {
+      socketRefCurrent.off(
+        "sender-responseToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready"
+      );
+    };
+  }, [UUID, setUUID, socketRef]);
 
   return (
     <>
