@@ -22,6 +22,8 @@ export const socketActions = {
 
   receiverJoin: "receiver-join",
   receiverJoinFailed_sender404: "receiver-join-failed-sender404",
+  receiverOnePreviousRequestIsAlreadyInPendingState:
+    "receiver-one-previous-request-is-already-in-pending-state",
   joining_request_sent_confirmation: "joining-request-sent-confirmation",
   receiver_joining_decline: "receiver-joining-decline",
   receiver_already_joined_with_same_UUID:
@@ -32,13 +34,14 @@ export const socketActions = {
     "sender-disconnect-during-receiver-request-approval",
   sender_disconnected_from_the_room: "sender-disconnected-from-the-room",
 
-  fsMeta: "fs-meta",
   fileMeta: "file-meta",
+  fsMeta: "fs-meta",
 
   fsStart: "fs-start",
 
-  fileRaw: "file-raw",
   fsShare: "fs-share",
+  // ^ from fileRaw to fsShare again and again till whole file shared
+  fileRaw: "file-raw",
 };
 
 export const socketConfig = {

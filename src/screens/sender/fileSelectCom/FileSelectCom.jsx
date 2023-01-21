@@ -39,6 +39,7 @@ const FileSelectCom = ({ receiverIDs, socketRef, UUID }) => {
       socketRef.current.emit(socketActions.fileMeta, {
         sender_uid: UUID,
         metadata: metadata,
+        receiverID: receiverIDs[0],
       });
 
       progress_node.innerHTML = "Request Sent<br />Ask Receiver to accept";
@@ -56,17 +57,19 @@ const FileSelectCom = ({ receiverIDs, socketRef, UUID }) => {
 
         progress_node.textContent = `Shared ${progressPercentage}%`;
         progress_node.style.color = "white";
-        progressPercentage < 101 &&
-          (progress_node.style.background = `repeating-linear-gradient(45deg, black, #000000a1 ${progressPercentage}px)`);
+        progressPercentage < 100 &&
+          (progress_node.style.background = `repeating-linear-gradient(25deg, black, #000000a1 ${progressPercentage}px)`);
 
         if (chunk.length !== 0) {
           socketRef.current.emit(socketActions.fileRaw, {
-            receiverIDs,
+            receiverID: receiverIDs[0],
             sender_uid: UUID,
             buffer: chunk,
           });
         } else {
-          progress_node.style.background = `repeating-linear-gradient(45deg, #74bf23, #109c10 100px)`;
+          progress_node.style.background = `repeating-linear-gradient(25deg, #74bf23, #109c10 100px)`;
+          progress_node.style.cursor = "not-allowed";
+          progress_node.disabled = true;
           toast.success("File Sent Successfully!");
         }
       });
@@ -108,7 +111,7 @@ const FileSelectCom = ({ receiverIDs, socketRef, UUID }) => {
 
   return (
     <>
-      <section>
+      <section className="topStatusBarHeader">
         <h4>Your_ID: {UUID}</h4>
         {receiverIDs.length > 1 ? (
           <>

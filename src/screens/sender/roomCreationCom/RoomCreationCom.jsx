@@ -10,19 +10,21 @@ import { copyToClipBoard, localStorageHandler } from "../../../helper/";
 import { Heading, Button } from "../../../components/commonSendReceivePageCom/";
 
 const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
-  const [isSharingEnabled, setIsSharingEnabled] = useState(false);
+  const [enableSharingBtnContent, setEnableSharingBtnContent] = useState({
+    btnText: "Enable Sharing",
+    bgColor: "#212222",
+  });
 
   const handleEnableSharing = useCallback(() => {
-    if (isSharingEnabled) return toast.success("Sharing Already Enabled!");
-
-    toast.success("Sharing Enabled!");
-
-    setIsSharingEnabled(true);
-
-    socketRef.current.emit(socketActions.senderJoin, {
-      uid: UUID,
-    });
-  }, [socketRef, UUID, isSharingEnabled]);
+    socketRef.current.emit(
+      "sender-requestToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready",
+      {
+        sender_uid: UUID,
+        justOnlyShowToast: false,
+        isThisEnableSharingRequest: true,
+      }
+    );
+  }, [socketRef, UUID]);
 
   const generateUUIDhandler = useCallback(() => {
     const generatedUUID = uuid();
@@ -32,15 +34,20 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
       newVal: generatedUUID,
     });
 
-    if (isSharingEnabled) {
-      setIsSharingEnabled(false);
-      toast.error("Default: SharingDisabled");
-    }
+    setEnableSharingBtnContent((prev) => {
+      if (prev.btnText !== "Enable Sharing") {
+        toast.error("Default: SharingDisabled");
+      }
+      return {
+        btnText: "Enable Sharing",
+        bgColor: "#212222",
+      };
+    });
 
     toast.success("New UUID Allocated Successfully!");
 
     setUUID(generatedUUID);
-  }, [setUUID, isSharingEnabled]);
+  }, [setUUID]);
 
   useEffect(() => {
     const socketRefCurrent = socketRef.current;
@@ -49,13 +56,38 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
       "sender-requestToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready",
       {
         sender_uid: UUID,
+        justOnlyShowToast: true,
+        isThisEnableSharingRequest: false,
       }
     );
+
+    socketRefCurrent.on("sender-already-joined-with-same-UUID", (data) => {
+      if (!data.justOnlyShowToast) {
+        setEnableSharingBtnContent({
+          btnText: "Already joined!",
+          bgColor: "#e62121d9",
+        });
+      }
+      toast.error("You are already joined with same UUID!");
+    });
 
     socketRefCurrent.on(
       "sender-responseToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready",
       (data) => {
-        setIsSharingEnabled(data.isSharingEnabled);
+        if (data.isSharingEnabled)
+          return toast.success("Sharing Already Enabled!");
+
+        if (data.isThisEnableSharingRequest) {
+          toast.success("Sharing Enabled!");
+          setEnableSharingBtnContent({
+            btnText: "Sharing Enabled!",
+            bgColor: "repeating-linear-gradient(45deg, #74bf23, #109c10 450px)",
+          });
+
+          socketRef.current.emit(socketActions.senderJoin, {
+            uid: UUID,
+          });
+        }
       }
     );
 
@@ -68,6 +100,7 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
       socketRefCurrent.off(
         "sender-responseToCheck-isSharingEnabled-isRoomCreated-isInTheRoomAlready"
       );
+      socketRefCurrent.off("sender-already-joined-with-same-UUID");
     };
   }, [UUID, setUUID, socketRef]);
 
@@ -103,11 +136,9 @@ const RoomCreationCom = ({ socketRef, UUID, setUUID }) => {
                 <Button
                   onClickFn={handleEnableSharing}
                   Icon={TbCloudDataConnection}
-                  btnValue={"Enable Sharing"}
+                  btnValue={enableSharingBtnContent.btnText}
                   styles={{
-                    background: isSharingEnabled
-                      ? "repeating-linear-gradient(45deg, #74bf23, #109c10 450px)"
-                      : "#212222",
+                    background: enableSharingBtnContent.bgColor,
                     margin: "1rem",
                   }}
                 />

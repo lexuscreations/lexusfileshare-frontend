@@ -10,11 +10,6 @@ const Receiver = ({ socketRef }) => {
   const [UUID, setUUID] = useState("");
   const [sender_uid, setSender_uid] = useState("");
 
-  // const receivedFileRef = useRef({
-  //   transmitted: 0,
-  //   buffer: [],
-  // });
-
   useEffect(() => {
     const socketRefCurrent = socketRef.current;
 
@@ -42,25 +37,6 @@ const Receiver = ({ socketRef }) => {
     };
   }, [socketRef]);
 
-  // socketRefCurrent.on("fs-share", function (buffer) {
-  //   console.log("Buffer", buffer);
-  //   receivedFileRef.current.buffer.push(buffer);
-  //   receivedFileRef.current.transmitted += buffer.byteLength;
-  //   // progress_node.innerText = Math.trunc((receivedFileRef.current.transmitted / fileMetadata.total_buffer_size) * 100);
-  //   if (
-  //     receivedFileRef.current.transmitted === fileMetadata.total_buffer_size
-  //   ) {
-  //     console.log("Download file: ", receivedFileRef.current);
-  //     // download(new Blob(receivedFileRef.current.buffer), fileMetadata.filename);
-  //     receivedFileRef.current = {
-  //       transmitted: 0,
-  //       buffer: [],
-  //     };
-  //   } else {
-  //     socketRefCurrent.emit("fs-start", { sender_uid });
-  //   }
-  // });
-
   return (
     <>
       {!sender_uid ? (
@@ -69,11 +45,15 @@ const Receiver = ({ socketRef }) => {
         </>
       ) : (
         <>
-          <section>
+          <section className="topStatusBarHeader">
             <h4>Your_ID: {UUID}</h4>
             <h4>Sender_ID: {sender_uid}</h4>
           </section>
-          <FileAcceptCon sender_uid={sender_uid} socketRef={socketRef} />
+          <FileAcceptCon
+            UUID={UUID}
+            sender_uid={sender_uid}
+            socketRef={socketRef}
+          />
         </>
       )}
     </>

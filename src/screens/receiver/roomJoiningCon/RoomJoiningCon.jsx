@@ -20,6 +20,8 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
     (targetEl) => {
       if (!UUID) return toast.error("kindly get your UUID first!");
       if (!sender_uid) return toast.error("Please Fill Sender UUID!");
+      if (UUID === sender_uid)
+        return toast.error("Sender UUID and Receiver UUID can't be same!");
 
       socketRef.current.emit(socketActions.receiverJoin, {
         sender_uid,
@@ -53,6 +55,18 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
       setConnectBtnState("Try Join Again");
       setIsApprovalPending(false);
     });
+
+    socketRefCurrent.on(
+      socketActions.receiverOnePreviousRequestIsAlreadyInPendingState,
+      () => {
+        toast.error(
+          "You Previous Joining Request Is Already In Pending State With Same UUID!"
+        );
+        requestSendSandStatusBtnRef.current.style.background = "#e62121d9";
+        setConnectBtnState("Request Already Pending!");
+        setIsApprovalPending(false);
+      }
+    );
 
     socketRefCurrent.on(socketActions.joining_request_sent_confirmation, () => {
       toast.success("Request send, Sender Approval pending!");
@@ -101,6 +115,9 @@ const RoomJoiningCon = ({ UUID, socketRef, setUUID }) => {
     return () => {
       socketRefCurrent.off(socketActions.receiver_joining_decline);
       socketRefCurrent.off(socketActions.receiverJoinFailed_sender404);
+      socketRefCurrent.off(
+        socketActions.receiverOnePreviousRequestIsAlreadyInPendingState
+      );
       socketRefCurrent.off(socketActions.joining_request_sent_confirmation);
       socketRefCurrent.off(
         socketActions.receiver_already_joined_with_same_UUID

@@ -53,3 +53,9 @@
   background: hsl(210, 12%, 47%);
   transform: scale(0.9);
 }
+
+@media (width <= 535px) {
+  .FileAcceptCon_previewContainer > div {
+    width: 100%;
+  }
+}

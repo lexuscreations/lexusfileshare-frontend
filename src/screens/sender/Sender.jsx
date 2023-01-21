@@ -140,9 +140,8 @@ const Sender = ({ socketRef }) => {
           <hr style={{ marginBottom: "1rem" }} />
           {Object.keys(tempReceiverRequestDataForModel).map(
             (receiverID, ind, arr) => (
-              <>
+              <div key={ind}>
                 <div
-                  key={ind}
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -195,7 +194,7 @@ const Sender = ({ socketRef }) => {
                     }}
                   />
                 ) : null}
-              </>
+              </div>
             )
           )}
         </section>
